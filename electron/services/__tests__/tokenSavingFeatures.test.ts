@@ -1,4 +1,4 @@
-import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, realpath, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -10,7 +10,7 @@ let root: string;
 let file: string;
 let service: ReturnType<typeof createPromptsService>;
 beforeEach(async () => {
-  root = await mkdtemp(path.join(os.tmpdir(), 'token-features-其他用户-'));
+  root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'token-features-其他用户-')));
   const codexHome = path.join(root, 'custom codex');
   await mkdir(path.join(codexHome, 'prompts'), { recursive: true });
   file = path.join(codexHome, 'prompts', 'global.md');

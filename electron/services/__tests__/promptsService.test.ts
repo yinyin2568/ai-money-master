@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm, writeFile, mkdir } from 'node:fs/promises';
+import { mkdtemp, readFile, realpath, rm, writeFile, mkdir } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -14,7 +14,7 @@ afterEach(async () => {
 
 describe('createPromptsService token saving batch', () => {
   async function setup(name = 'review.md') {
-    tempHome = await mkdtemp(path.join(os.tmpdir(), 'other-user-中文-'));
+    tempHome = await realpath(await mkdtemp(path.join(os.tmpdir(), 'other-user-中文-')));
     const dir = path.join(tempHome, '.codex', 'prompts');
     await mkdir(dir, { recursive: true });
     const file = path.join(dir, name);
@@ -75,7 +75,7 @@ describe('createPromptsService token saving batch', () => {
     expect(await readFile(file, 'utf8')).toBe(edited);
   });
   it('appends the token saving block and restores the exact original text', async () => {
-    tempHome = await mkdtemp(path.join(os.tmpdir(), 'ai-money-master-prompts-'));
+    tempHome = await realpath(await mkdtemp(path.join(os.tmpdir(), 'ai-money-master-prompts-')));
     const promptDir = path.join(tempHome, '.codex', 'prompts');
     await mkdir(promptDir, { recursive: true });
     const promptPath = path.join(promptDir, 'review.md');
@@ -93,7 +93,7 @@ describe('createPromptsService token saving batch', () => {
   });
 
   it('scans and updates enabled custom Skill modules such as linyingskills', async () => {
-    tempHome = await mkdtemp(path.join(os.tmpdir(), 'ai-money-master-prompts-module-'));
+    tempHome = await realpath(await mkdtemp(path.join(os.tmpdir(), 'ai-money-master-prompts-module-')));
     const moduleDir = path.join(tempHome, 'linyingskills');
     await mkdir(moduleDir, { recursive: true });
     await mkdir(path.join(moduleDir, 'skills', 'sample-skill'), { recursive: true });

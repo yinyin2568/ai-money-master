@@ -1,5 +1,5 @@
 import { afterEach, expect, it } from 'vitest';
-import { mkdtemp, mkdir, readFile, writeFile, rm, symlink } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, realpath, writeFile, rm, symlink } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
@@ -11,7 +11,7 @@ import { createPromptsService } from '../promptsService.js';
 const roots: string[] = [];
 afterEach(async () => { for (const root of roots.splice(0)) await rm(root, { recursive: true, force: true }); });
 async function fixture() {
-  const homeDir = await mkdtemp(path.join(os.tmpdir(), 'manager-storage-'));
+  const homeDir = await realpath(await mkdtemp(path.join(os.tmpdir(), 'manager-storage-')));
   roots.push(homeDir);
   const root = path.join(homeDir, '.skills-manager');
   await mkdir(path.join(root, 'state'), { recursive: true });

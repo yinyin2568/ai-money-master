@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { access, lstat, mkdtemp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { access, lstat, mkdtemp, mkdir, readFile, realpath, rm, stat, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
@@ -18,7 +18,8 @@ afterEach(async () => {
 });
 
 async function createTempHome() {
-  tempRoot = await mkdtemp(path.join(os.tmpdir(), 'skills-manager-test-'));
+  // Windows runners may expose TEMP through an 8.3 alias; services return real paths.
+  tempRoot = await realpath(await mkdtemp(path.join(os.tmpdir(), 'skills-manager-test-')));
   return tempRoot;
 }
 
