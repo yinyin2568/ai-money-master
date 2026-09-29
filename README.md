@@ -301,7 +301,7 @@ macOS 构建默认未签名、未公证，尚无 Mac 实机安装验证。不要
 
 ## 本地开发与构建
 
-建议使用 Node.js 22 或更高版本，在目标平台重新安装依赖。下载源码附件后解压并进入含 `package.json` 的目录，或在仓库源码已上传后克隆：
+建议使用 Node.js 22 或更高版本，在目标平台重新安装依赖。下载源码附件后解压并进入含 `package.json` 的目录，或直接克隆仓库：
 
 ```bash
 git clone https://github.com/yinyin2568/ai-money-master.git
