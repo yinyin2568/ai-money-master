@@ -1,0 +1,67 @@
+name: Build macOS Client
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - package.json
+      - package-lock.json
+      - electron/**
+      - src/**
+      - scripts/**
+      - public/**
+      - index.html
+      - tsconfig*.json
+      - vite.config.ts
+      - vitest.config.ts
+      - .github/workflows/build-mac.yml
+
+permissions:
+  contents: read
+
+jobs:
+  build-mac:
+    # Build each architecture on its matching host so optional native ccusage
+    # dependencies match the packaged app. macos-latest currently means arm64.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            arch: arm64
+          - runner: macos-15-intel
+            arch: x64
+    runs-on: ${{ matrix.runner }}
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: "false"
+      SKILLS_MANAGER_CLI_RELEASE_DIR: release/cli
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build macOS artifacts
+        run: npm run dist:mac -- --${{ matrix.arch }}
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-money-master-macos-${{ matrix.arch }}
+          if-no-files-found: error
+          path: |
+            release/electron-builder/**/*.dmg
+            release/electron-builder/**/*.zip
+            release/cli/**

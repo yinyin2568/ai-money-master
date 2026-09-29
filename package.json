@@ -1,0 +1,105 @@
+{
+  "name": "ai-money-master",
+  "version": "0.1.2",
+  "description": "AI省钱大师：本地 AI 工具、Skills 与 Token 成本管理器",
+  "author": { "name": "yinyin2568", "url": "https://github.com/yinyin2568" },
+  "repository": { "type": "git", "url": "https://github.com/yinyin2568/ai-money-master.git" },
+  "homepage": "https://github.com/yinyin2568/ai-money-master#readme",
+  "bugs": { "url": "https://github.com/yinyin2568/ai-money-master/issues" },
+  "private": true,
+  "type": "module",
+  "main": "dist-electron/electron/main.js",
+  "scripts": {
+    "dev": "npm run electron:compile && concurrently \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && cross-env VITE_DEV_SERVER_URL=http://127.0.0.1:5173 electron .\"",
+    "dev:server": "vite --host 127.0.0.1",
+    "dev:app": "npm run electron:compile && cross-env VITE_DEV_SERVER_URL=http://127.0.0.1:5173 electron .",
+    "build": "npm run typecheck && vite build && npm run electron:compile",
+    "electron:compile": "tsc -p tsconfig.node.json",
+    "cli": "npm run electron:compile && node dist-electron/electron/cli.js",
+    "cli:release": "npm run electron:compile && npm run cli:release:copy",
+    "cli:release:copy": "node scripts/copy-cli-release.mjs",
+    "pack:win": "npm run build && npm run cli:release:copy && electron-builder --win --dir",
+    "dist:win": "npm run build && npm run cli:release:copy && electron-builder --win nsis --publish never",
+    "pack:mac": "npm run build && npm run cli:release:copy && electron-builder --mac --dir --config.directories.output=release/electron-builder",
+    "dist:mac": "npm run build && npm run cli:release:copy && electron-builder --mac dmg zip --config.directories.output=release/electron-builder --publish never",
+    "test": "vitest run --pool=threads --minWorkers=1 --maxWorkers=1",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "bin": {
+    "skills-manager": "dist-electron/electron/cli.js"
+  },
+  "build": {
+    "appId": "com.local.skillsmanager",
+    "productName": "AI省钱大师",
+    "artifactName": "ai-money-master-${version}-${os}-${arch}.${ext}",
+    "asarUnpack": [
+      "node_modules/@ccusage/**"
+    ],
+    "directories": {
+      "output": "release/electron-builder"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "!dist-electron/**/__tests__/**",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "identity": null,
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "deleteAppDataOnUninstall": false,
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false
+    }
+  },
+  "dependencies": {
+    "ccusage": "20.0.23",
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^5.1.1",
+    "concurrently": "^9.1.0",
+    "cross-env": "^7.0.3",
+    "electron": "^33.2.1",
+    "electron-builder": "^26.15.3",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.3",
+    "vitest": "^2.1.8",
+    "wait-on": "^8.0.1"
+  }
+}
