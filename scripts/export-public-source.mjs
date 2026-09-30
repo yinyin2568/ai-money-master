@@ -18,7 +18,7 @@ await mkdir(output, { recursive: true });
 // Explicit allowlist: development notes, original Git history, accounts and
 // generated artifacts never enter the public repository.
 const entries = [
-  '.gitignore', '.gitattributes', '.github', 'README.md', 'CHANGELOG.md',
+  '.gitignore', '.gitattributes', '.github', 'README.md', 'README.en.md', 'CHANGELOG.md',
   'package.json', 'package-lock.json', 'index.html', 'tsconfig.json',
   'tsconfig.node.json', 'vite.config.ts', 'vitest.config.ts',
   'electron', 'src', 'public', 'scripts', 'skills',

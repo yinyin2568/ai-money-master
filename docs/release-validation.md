@@ -1,6 +1,6 @@
 # 0.1.2 发布验证记录
 
-验证日期：2026-09-29。平台：Windows x64；Node.js 24.19.0。结果只适用于以下已执行范围。
+本地验证日期：2026-09-29。平台：Windows x64；Node.js 24.19.0。2026-09-30 补充 GitHub Actions 检查。结果只适用于以下已执行范围。
 
 ## 检查范围
 
@@ -31,10 +31,12 @@
 | 独立 CLI | PASS | 空依赖目录执行 `npm ci --omit=dev --ignore-scripts`，隔离用户目录执行 help / settings get / scan |
 | 公开源码独立安装 | PASS | 单独快照目录从零执行 `npm ci`，142 个测试和生产构建再次通过 |
 | 公开源码密钥扫描 | PASS | gitleaks 8.30.1 扫描公开快照，未检出匹配规则的密钥；专属路径检查无匹配 |
-| 远程源码 | PASS | 通过 GitHub CLI 推送 main；86 个公开文件的远程 Git blob 与本地提交逐项一致，包含完整中文 README |
+| 远程 Windows 检查 | PASS | 修复测试临时路径别名后，[Check source](https://github.com/yinyin2568/ai-money-master/actions/runs/36678602775) 完成安装、类型检查、144 个测试和构建 |
+| 远程 macOS 构建 | PASS | 修复 ccusage 原生二进制执行权限后，[Build macOS Client](https://github.com/yinyin2568/ai-money-master/actions/runs/36678602862) 的 Apple Silicon 与 Intel 任务通过；未进行 Mac 桌面安装与启动验收 |
+| 远程源码 | PASS | 通过 GitHub CLI 推送 main；公开文件的远程 Git blob 与本地提交逐项一致，包含完整中英文 README |
 | macOS 实际运行 | 未执行 | 提供匹配架构的构建工作流；没有 Mac 实机证据 |
 
-公开快照已完成密钥扫描；本地安装包、CLI 包和源码包已逐项核对 SHA-256，源码包内容与公开清单一致。远程源码已逐项核对；Release 附件在公开发布前核对远程大小与 GitHub 提供的 SHA-256 digest，实际结果记录在该版本的 Release 说明中。历史开发笔记、用户数据、原始截图和旧构建产物不包含在公开快照中。
+公开快照已完成密钥扫描；本地安装包、CLI 包和源码包已逐项核对 SHA-256，源码包内容与公开清单一致。远程源码已逐项核对；Release 附件的远程大小与 GitHub 提供的 SHA-256 digest 已核对，实际结果记录在该版本的 Release 说明中。历史开发笔记、用户数据、原始截图和旧构建产物不包含在公开快照中。
 
 ## 实际限制
 

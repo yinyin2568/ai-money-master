@@ -1,5 +1,7 @@
 # AI省钱大师
 
+[简体中文](README.md) · [English](README.en.md)
+
 本地 AI 工具、Skills 与 Token 成本管理器。集中管理 AI 开发资产，查看本机 Codex 会话消耗，并通过提示词、可复用 Skills 和 RTK 减少重复工作。
 
 适合同时使用多个 AI 开发工具、积累了许多 Skills 和提示词，希望整理本地资产、了解 Token 消耗并减少重复输入的用户。基于 Electron、React 和 TypeScript，桌面版直接安装使用，无需先安装 Node.js。
@@ -417,6 +419,8 @@ npm ci --omit=dev --ignore-scripts
 ## 验证范围与反馈
 
 0.1.2 已在 Windows x64 上完成类型检查、15 个测试文件的 142 个测试、生产构建、NSIS 打包，以及从安装包解出应用后的隔离目录启动检查。另行验证了演示 Skill 扫描、测试会话统计、提示词写入/恢复、分项开关、数据迁移/恢复和 CLI 基本命令。
+
+后续主分支在 GitHub Actions 的 Windows 检查中通过 144 个测试；macOS 的 Apple Silicon 与 Intel 构建工作流也通过。它们不等同于在 Mac 上安装并启动应用，具体见 [验证记录](docs/release-validation.md)。
 
 这不是全新 Windows 用户或虚拟机中的完整安装测试；完整安装/卸载、macOS 实机、真实账号收藏写入、第三方 NPX 执行、性能压测和完整安全测试尚未覆盖。密钥与规则扫描未检出匹配项，也不能保证不存在全部安全问题。详细证据边界见 [首版验证记录](docs/release-validation.md)。
 
