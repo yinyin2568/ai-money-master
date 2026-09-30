@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { chmodSync, existsSync, statSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
@@ -80,6 +80,13 @@ function resolveCodexHomes() {
 }
 
 async function runCcusage(command: string, args: string[], env: NodeJS.ProcessEnv) {
+  const nativeSuffix = `/node_modules/@ccusage/ccusage-${process.platform}-${process.arch}/bin/ccusage`;
+  if (process.platform !== 'win32' && command.replace(/\\/g, '/').endsWith(nativeSuffix)) {
+    // The npm package's own launcher repairs missing executable bits too.
+    // We invoke its native binary directly because Electron cannot use that Node launcher.
+    const mode = statSync(command).mode;
+    if ((mode & 0o100) === 0) chmodSync(command, mode | 0o100);
+  }
   const result = await execFileAsync(command, args, {
     windowsHide: true,
     shell: process.platform === 'win32' && /\.(cmd|bat)$/i.test(command),
