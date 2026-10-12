@@ -24,7 +24,7 @@ import type {
 import { getErrorMessage, parseTags } from '../shared/uiUtils';
 
 interface ImportPanelProps {
-  mode?: 'all' | 'github-to-skill' | 'repo-management';
+  mode?: 'all' | 'modules' | 'github-to-skill' | 'repo-management';
   directories: SkillDirectory[];
   skillCount: number;
   moduleDialogOpen: boolean;

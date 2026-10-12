@@ -34,6 +34,18 @@ describe('independent token saving features', () => {
     expect((await status()).features.rtk.state).toBe('off');
   });
 
+  it('enables and removes the knowledge conversion instruction independently', async () => {
+    const feature = TOKEN_SAVING_FEATURES.find((item) => item.id === 'knowledge-to-skill')!;
+    expect((await status()).features['knowledge-to-skill'].state).toBe('off');
+    await service.setTokenSavingFeature([file], 'knowledge-to-skill', true, 'inline');
+    expect(await read()).toContain(feature.content);
+    expect(await read()).toContain('virgiliojr94/book-to-skill/master/SKILL.md');
+    expect((await status()).features['knowledge-to-skill'].state).toBe('current');
+    await service.setTokenSavingFeature([file], 'knowledge-to-skill', false, 'inline');
+    expect(await read()).not.toContain('feature:knowledge-to-skill');
+    expect(await read()).toContain('保留我的规则');
+  });
+
   it('replaces old versions and removes duplicates without touching user content', async () => {
     const feature = TOKEN_SAVING_FEATURES[1];
     const old = featureBlock({ ...feature, version: '0', content: 'old content' }, 'inline');

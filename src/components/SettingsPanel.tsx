@@ -5,12 +5,14 @@ import { getErrorMessage, parseTags } from '../shared/uiUtils';
 import StorageSettingsPanel from './StorageSettingsPanel';
 
 interface SettingsPanelProps {
+  mode?: 'all' | 'paths' | 'accounts';
   directories: SkillDirectory[];
   onSaveDefaultDirectories: (directories: SkillDirectory[]) => void | Promise<void>;
   onSaveCustomDirectories: (directories: SkillDirectory[]) => void | Promise<void>;
 }
 
 export default function SettingsPanel({
+  mode = 'all',
   directories,
   onSaveDefaultDirectories,
   onSaveCustomDirectories
@@ -196,8 +198,8 @@ export default function SettingsPanel({
 
   return (
     <div className="stack">
-      <StorageSettingsPanel />
-      <section className="panel">
+      {mode !== 'accounts' && <StorageSettingsPanel />}
+      {mode !== 'accounts' && <section className="panel">
         <div className="panel-header privacy-header">
           <div>
             <h3>隐私与离线模式</h3>
@@ -214,9 +216,9 @@ export default function SettingsPanel({
             <span>{offlineMode ? '离线模式已开启' : '离线模式已关闭'}</span>
           </label>
         </div>
-      </section>
+      </section>}
 
-      <section className="panel">
+      {mode !== 'paths' && <section className="panel">
         <div className="panel-header">
           <div>
             <h3>账号管理</h3>
@@ -275,9 +277,9 @@ export default function SettingsPanel({
           </div>
         </div>
         {status && <p className="settings-status">{status}</p>}
-      </section>
+      </section>}
 
-      <section className="panel">
+      {mode !== 'accounts' && <section className="panel">
         <div className="panel-header">
           <div>
             <h3>默认模块路径</h3>
@@ -339,9 +341,9 @@ export default function SettingsPanel({
             </div>
           ))}
         </div>
-      </section>
+      </section>}
 
-      <section className="panel">
+      {mode !== 'accounts' && <section className="panel">
         <div className="panel-header">
           <div>
             <h3>自定义模块路径</h3>
@@ -410,7 +412,8 @@ export default function SettingsPanel({
             添加
           </button>
         </div>
-      </section>
+      </section>}
+      {mode === 'paths' && status && <p className="settings-status" role="status">{status}</p>}
     </div>
   );
 }

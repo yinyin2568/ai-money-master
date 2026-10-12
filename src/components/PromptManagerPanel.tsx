@@ -128,7 +128,7 @@ export default function PromptManagerPanel(props: PromptManagerPanelProps) {
   return (
     <div className="stack prompt-manager">
       <section className="panel">
-        <div className="panel-header compact"><div><h3>节约 Token · 两种方式</h3><p>① 优化提示词：在下方选择文件并开启所需分项。② 开启 RTK：精简命令输出。</p></div></div>
+        <div className="panel-header compact"><div><h3>提示词优化与 RTK</h3><p>在下方选择本地提示词，按需开启节约 Token 或理论转 Skills 规则；RTK 可精简命令输出。</p></div></div>
         <div className="prompt-batch-toolbar">
           <button className="button small secondary" disabled={guideBusy} onClick={() => void saveGuide()}>保存指南到本机</button>
           <button className="button small primary" disabled={guideBusy} onClick={() => void saveGuide(true)}>复制全局引用指令</button>

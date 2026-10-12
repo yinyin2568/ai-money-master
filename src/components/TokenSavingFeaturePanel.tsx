@@ -50,14 +50,14 @@ export default function TokenSavingFeaturePanel(props: Props) {
   const valid = statuses.filter((item) => !item.error);
   return <div className="token-feature-config" id="token-saving-features">
     <div className="panel-header compact">
-      <div><h3>优化提示词 · 分项开关</h3><p>先选择下方目标文件。开启即检查并新增或更新，关闭即删除该项规则，其他内容保留。</p></div>
+      <div><h3>优化提示词 · 分项开关</h3><p>先选择下方目标文件。开启即检查并新增或更新对应规则，关闭即删除该项规则，其他内容保留。“理论转 Skills”只在后续收到转换请求时运行。</p></div>
       <button className="button small secondary" disabled={props.busy || loading || !paths.length} onClick={() => setRefresh((value) => value + 1)}>重新检测配置</button>
     </div>
     <div className="prompt-batch-toolbar">
       <label>开启 / 更新时写入方式 <select aria-label="规则写入方式" value={mode} disabled={props.busy} onChange={(event) => setMode(event.target.value as TokenSavingMode)}><option value="inline">完整正文</option><option value="document">引用分项文档</option></select></label>
       <span className="prompt-batch-hint">已选 {paths.length} 个文件{loading ? ' · 检测中…' : ''}</span>
     </div>
-    <p className="token-feature-note">每项使用指南对应章节全文。引用模式会在当前用户目录保存完整分项文档；关闭只移除目标提示词中的引用，共享文档保留供其他文件使用。修改前保存备份。</p>
+    <p className="token-feature-note">节约 Token 分项使用指南对应章节全文；“理论转 Skills”使用独立规则。引用模式会在当前用户目录保存完整分项文档；关闭只移除目标提示词中的引用，共享文档保留供其他文件使用。修改前保存备份。</p>
     <p className="token-feature-note">分项开关仅管理本工具标记的规则。若之前手动粘贴了整篇指南或整篇引用，请先移除，否则关闭某一项后其他位置的相同规则仍会生效。</p>
     {statuses.some((item) => item.legacy) && <p className="token-feature-note">检测到旧版整体规则：首次操作会拆分原有功能，再应用本次开关；其他已开启功能保留。</p>}
     {error && <p role="alert">{error}</p>}

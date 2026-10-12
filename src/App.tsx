@@ -18,7 +18,8 @@ import {
   ShieldCheck,
   GitBranch,
   Sparkles,
-  SquareTerminal
+  SquareTerminal,
+  UserRound
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Dashboard from './components/Dashboard';
@@ -64,36 +65,37 @@ type PageId =
   | 'logs';
 
 type NavItem = { id: PageId; label: string; description: string; icon: typeof LayoutDashboard };
-type NavSection = { label?: string; items: NavItem[] };
+type NavSection = { label: string; items: NavItem[] };
 
 const navSections: NavSection[] = [
-  { items: [
+  { label: '数据中心', items: [
     { id: 'dashboard', label: '总览', description: '查看本机 Skills 数量、风险、星标和最近使用。', icon: LayoutDashboard },
-    { id: 'token-usage', label: '统计', description: '按模块查看本地会话 Token 消耗、Skills 调用次数和费用估算。', icon: History }
+    { id: 'token-usage', label: 'Token 与费用统计', description: '按模块查看本地会话 Token 消耗、Skills 调用次数和费用估算。', icon: History }
   ] },
-  { label: 'AI 管理', items: [
-    { id: 'local-cli', label: '我的 CLI', description: '查看本机 CLI 的安装状态、版本、程序路径和配置文件。', icon: SquareTerminal },
-    { id: 'local-plugins', label: '我的插件', description: '查看本地插件与版本。', icon: Package },
-    { id: 'local-mcp', label: '我的 MCP', description: '汇总本机 MCP Server 配置、传输方式、版本和来源路径。', icon: Network },
-    { id: 'local-agents', label: '我的 Agent', description: '扫描本地 Agent 定义与配置文件。', icon: Bot },
-    { id: 'skills', label: '我的 Skills', description: '管理 Skills、标签、星标、同步、打包和优化记忆。', icon: BookOpen },
-    { id: 'local-prompts', label: '我的提示词', description: '扫描并管理本地提示词文件。', icon: FileText },
-    { id: 'local-memories', label: '我的记忆', description: '查看本地记忆文件。', icon: Brain }
+  { label: 'AI 资源中心', items: [
+    { id: 'skills', label: 'Skills', description: '管理 Skills、标签、星标、同步、打包和优化记忆。', icon: BookOpen },
+    { id: 'local-prompts', label: '提示词', description: '扫描并管理本地提示词文件。', icon: FileText },
+    { id: 'local-memories', label: '记忆', description: '查看本地记忆文件。', icon: Brain },
+    { id: 'local-cli', label: 'CLI', description: '查看本机 CLI 的安装状态、版本、程序路径和配置文件。', icon: SquareTerminal },
+    { id: 'local-plugins', label: '插件', description: '查看本地插件与版本。', icon: Package },
+    { id: 'local-mcp', label: 'MCP', description: '汇总本机 MCP Server 配置、传输方式、版本和来源路径。', icon: Network },
+    { id: 'local-agents', label: 'Agent', description: '扫描本地 Agent 定义与配置文件。', icon: Bot }
   ] },
-  { label: '代码仓库 AI 化 · GitHub 管理', items: [
-    { id: 'github-to-skill', label: 'GitHub 转 Skill', description: '将 GitHub 仓库包装为本地 Skill 模块。', icon: Github },
+  { label: '工作台', items: [
+    { id: 'scene-memory', label: '资源复用', description: '保存任务场景，关联本地记忆并复用到提示词。', icon: Sparkles }
+  ] },
+  { label: '仓库与社区', items: [
     { id: 'repo-management', label: '仓库技能管理', description: '检查并同步仓库来源 Skills。', icon: GitBranch },
-    { id: 'github', label: 'GitHub 收藏管理', description: '管理 GitHub Star、高星推荐和标签。', icon: Github },
-    { id: 'gitee', label: 'Gitee 管理', description: '管理 Gitee 收藏、高星推荐和标签。', icon: GitBranch }
+    { id: 'github-to-skill', label: 'GitHub 转 Skill', description: '将 GitHub 仓库包装为本地 Skill 模块。', icon: Github },
+    { id: 'github', label: 'GitHub 收藏', description: '管理 GitHub Star、高星推荐和标签。', icon: Github },
+    { id: 'gitee', label: 'Gitee 收藏', description: '管理 Gitee 收藏、高星推荐和标签。', icon: GitBranch },
+    { id: 'marketplace', label: '社区市场', description: '浏览、安装并分享社区贡献的 Skills。', icon: Store }
   ] },
-  { items: [
-    { id: 'import', label: '设置', description: '管理模块、新增模块、默认路径和扫描入口。', icon: FolderCog },
+  { label: '系统管理', items: [
+    { id: 'import', label: '模块与路径配置', description: '管理模块、新增模块、默认路径、本地存储和离线模式。', icon: FolderCog },
+    { id: 'settings', label: '账号设置', description: '管理 GitHub 和 Gitee 账号及本机访问令牌。', icon: UserRound },
     { id: 'security', label: '安全扫描', description: '检查 Skills 中的高风险脚本、敏感路径和提示注入风险。', icon: ShieldCheck },
-    { id: 'logs', label: '日志', description: '查看扫描、同步、优化记忆和系统操作记录。', icon: History }
-  ] },
-  { label: '社区市场', items: [
-    { id: 'marketplace', label: '社区市场首页', description: '浏览、安装并分享社区贡献的 Skills。', icon: Store },
-    { id: 'scene-memory', label: '场景复用', description: '沉淀任务场景，关联本地记忆并复用到提示词。', icon: Brain }
+    { id: 'logs', label: '操作日志', description: '查看扫描、同步、优化记忆和系统操作记录。', icon: History }
   ] }
 ];
 
@@ -163,6 +165,7 @@ export default function App() {
   }, [refreshData]);
 
   useEffect(() => {
+    if (!window.skillsManager) return;
     if (activePage === 'local-cli' && cliScan.scannedAt === 0 && !cliLoading) void handleRescanClis();
     if (activePage === 'local-mcp' && mcpScan.scannedAt === 0 && !mcpLoading) void handleRescanMcps();
     if (activePage === 'local-plugins' && pluginScan.scannedAt === 0 && !pluginLoading) void handleRescanAsset('plugin');
@@ -178,7 +181,10 @@ export default function App() {
     () => (selectedSkillId ? securityReports.find((report) => report.skillId === selectedSkillId) : undefined),
     [securityReports, selectedSkillId]
   );
-  const activeNavItem = navItems.find((item) => item.id === activePage) ?? navItems[0];
+  const activeNavItem = navItems.find((item) => item.id === activePage) ?? {
+    id: 'prompt', label: '提示词生成', description: '使用复用的任务场景和本地记忆生成提示词。', icon: FileText
+  };
+  const activeSection = navSections.find((section) => section.items.some((item) => item.id === activePage))?.label ?? '工作台';
   const desktopAvailable = Boolean(window.skillsManager);
 
   async function handleViewSkill(skill: InstalledSkill) {
@@ -655,7 +661,7 @@ export default function App() {
       return (
         <div className="stack">
           <ImportPanel
-            mode="all"
+            mode="modules"
             directories={directories}
             skillCount={skills.length}
             moduleDialogOpen={moduleDialogOpen}
@@ -665,6 +671,7 @@ export default function App() {
             setNotice={setNotice}
           />
           <SettingsPanel
+            mode="paths"
             directories={directories}
             onSaveDefaultDirectories={handleSaveDefaultDirectories}
             onSaveCustomDirectories={handleSaveCustomDirectories}
@@ -706,6 +713,7 @@ export default function App() {
     if (activePage === 'settings') {
       return (
         <SettingsPanel
+          mode="accounts"
           directories={directories}
           onSaveDefaultDirectories={handleSaveDefaultDirectories}
           onSaveCustomDirectories={handleSaveCustomDirectories}
@@ -733,19 +741,20 @@ export default function App() {
           </div>
           <div>
             <h1>AI省钱大师</h1>
-            <p>本地 QA 工作台</p>
+            <p>AI 资源与成本管理</p>
           </div>
         </div>
-        <nav className="nav-list">
-          {navSections.map((section, sectionIndex) => (
-            <div className="nav-section" key={section.label ?? `section-${sectionIndex}`}>
-              {section.label && <div className="nav-section-label">{section.label}</div>}
+        <nav className="nav-list" aria-label="功能导航">
+          {navSections.map((section) => (
+            <div className="nav-section" key={section.label} role="group" aria-label={section.label}>
+              <div className="nav-section-label">{section.label}</div>
               {section.items.map((item) => {
                 const Icon = item.icon;
                 return (
                   <button
                     key={item.id}
                     className={`nav-item ${activePage === item.id ? 'active' : ''}`}
+                    aria-current={activePage === item.id ? 'page' : undefined}
                     onClick={() => setActivePage(item.id)}
                   >
                     <Icon size={18} />
@@ -764,7 +773,7 @@ export default function App() {
       <section className="workspace">
         <header className="page-header">
           <div>
-            <p className="eyebrow">AI省钱大师</p>
+            <p className="eyebrow">{activeSection}</p>
             <h2>{activeNavItem.label}</h2>
             <p className="subtitle">{activeNavItem.description}</p>
           </div>
